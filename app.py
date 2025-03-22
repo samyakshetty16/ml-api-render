@@ -18,7 +18,7 @@ def predict(data: InputData):
     prediction = model.predict(input_array)
     return {"prediction": prediction.tolist()}'''
 
-from flask import Flask, request, jsonify
+'''from flask import Flask, request, jsonify
 import os
 
 app = Flask(__name__)
@@ -39,5 +39,35 @@ if __name__ == "__main__":
     # Get port from Render's environment or default to 5000
     port = int(os.environ.get("PORT", 5000))
     # Run app on all IPs to avoid binding issues
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port)'''
+
+
+from fastapi import FastAPI, Request
+from pydantic import BaseModel
+import os
+
+app = FastAPI()
+
+# Define request body model
+class PredictRequest(BaseModel):
+    input_data: str
+
+# Example route
+@app.get("/")
+def home():
+    return {"message": "API is running!"}
+
+# Example predict route
+@app.post("/predict")
+def predict(request: PredictRequest):
+    # Add your prediction logic here
+    return {"prediction": f"Received: {request.input_data}"}
+
+if __name__ == "__main__":
+    # Get port from Render's environment or default to 8000
+    port = int(os.environ.get("PORT", 8000))
+    # Run app on all IPs to avoid binding issues
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=port)
+
 
