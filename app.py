@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+'''from fastapi import FastAPI
 from pydantic import BaseModel
 import tensorflow as tf
 import numpy as np
@@ -16,4 +16,28 @@ class InputData(BaseModel):
 def predict(data: InputData):
     input_array = np.array([data.input])
     prediction = model.predict(input_array)
-    return {"prediction": prediction.tolist()}
+    return {"prediction": prediction.tolist()}'''
+
+from flask import Flask, request, jsonify
+import os
+
+app = Flask(__name__)
+
+# Example route
+@app.route('/')
+def home():
+    return jsonify({"message": "API is running!"})
+
+# Example predict route
+@app.route('/predict', methods=['POST'])
+def predict():
+    data = request.get_json()
+    # Add your prediction logic here
+    return jsonify({"prediction": "sample output"})
+
+if __name__ == "__main__":
+    # Get port from Render's environment or default to 5000
+    port = int(os.environ.get("PORT", 5000))
+    # Run app on all IPs to avoid binding issues
+    app.run(host="0.0.0.0", port=port)
+
